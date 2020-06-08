@@ -1,0 +1,26 @@
+on: 
+  push
+name: Test
+jobs:
+  test:
+    name: Test
+    runs-on: macOS-latest
+    strategy:
+        matrix:
+          xcode: [11.2_beta 2]
+          destination: ['platform=iOS Simulator,name=iPhone 11']
+    steps:
+      - run: swift --version
+      - name: Checkout
+        uses: actions/checkout@master
+      - name: Cache-Cocoapods
+        uses: actions/cache@v2
+        with:
+          path: Pods
+          key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pods_cache-
+      - name : Pod install Check
+        if: steps.Cache-Cocoapods.outputs.cache-hit != 'true'
+        run: |
+          bundle install; bundle exec pod install;
