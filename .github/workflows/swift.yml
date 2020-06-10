@@ -3,7 +3,7 @@ on:
 name: Test
 jobs:
   test:
-    name: Test
+    name: Testa
     runs-on: macOS-latest
     strategy:
         matrix:
